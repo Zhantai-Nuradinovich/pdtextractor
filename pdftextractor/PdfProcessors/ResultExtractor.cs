@@ -52,7 +52,8 @@ namespace pdftextractor
 
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    vote.DeputyId = db.Deputies.Where(d => d.Name == vote.Deputy.Name).FirstOrDefault()?.Id ?? db.Deputies.Add(vote.Deputy).Entity.Id;
+                    vote.DeputyId = db.Deputies.Where(d => d.Name == vote.Deputy.Name).FirstOrDefault()?.Id 
+                        ?? db.Deputies.Add(vote.Deputy).Entity.Id;
                 }
 
 

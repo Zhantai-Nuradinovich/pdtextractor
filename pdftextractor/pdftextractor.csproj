@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <Folder Include="Downloaded Files\" />
+    <Folder Include="PdfProcessor\" />
   </ItemGroup>
 
 </Project>

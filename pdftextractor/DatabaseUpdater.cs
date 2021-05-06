@@ -1,4 +1,6 @@
 ﻿using pdftextractor.Data.Models;
+using pdftextractor.Implementations;
+using pdftextractor.Interfaces;
 using pdftextractor.Operators;
 using System;
 using System.Collections.Generic;
@@ -10,14 +12,21 @@ using System.Threading.Tasks;
 
 namespace pdftextractor
 {
-    class DatabaseUpdater
+    public class DatabaseUpdater
     {
+        IOperationStrategy strategy;
+
         const string baseUrl = "http://kenesh.kg/ru/article/list/11?page="; //baseUrl->pages->articles->files
         const string JK = "Жогорку Кеңеш";
         const string government = "Правительство";
         string directory = "../../../Downloaded Files";
-        
+
         //нужно сохранить адрес последней загруженной страницы
+
+        public DatabaseUpdater()
+        {
+            strategy = new VoteStrategy();
+        }
 
         public string[] GetArticlesUrls(string pageUrl)
         {
