@@ -10,7 +10,12 @@ namespace pdftextractor.Implementations
     public class VoteStrategy : IOperationStrategy
     {
         public ResultExtractor extractor { get; set; }
-        public int LawId { get; set; }
+        int LawId { get; set; }
+        public int Id 
+        { 
+            get => LawId; 
+        }
+
         public VoteStrategy(ResultExtractor extractor, int lawId)
         {
             this.extractor = extractor;

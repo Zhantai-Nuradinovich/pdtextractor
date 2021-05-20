@@ -12,6 +12,10 @@ namespace pdftextractor.Implementations
     {
         public string LawName { get; set; }
         public int LawId { get; set; }
+        public int Id
+        {
+            get => LawId;
+        }
         public bool AddToDb()
         {
             try

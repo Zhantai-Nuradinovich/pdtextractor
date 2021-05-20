@@ -1,4 +1,6 @@
-﻿using pdftextractor.Operators;
+﻿using pdftextractor.Implementations;
+using pdftextractor.Interfaces;
+using pdftextractor.Operators;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Parsing;
 using System;
@@ -15,7 +17,9 @@ namespace pdftextractor
             Console.OutputEncoding = Encoding.UTF8;
             Console.WindowWidth = 160;
             Console.WindowHeight = 40;
-            var test = new DatabaseUpdater();
+
+            IPdfBuilder builder = new LawFromDeputyPdfBuilder();
+            var test = new DatabaseUpdater(builder);
 
             test.UpdateDatabase();
         }

@@ -8,6 +8,7 @@ namespace pdftextractor.Interfaces
 {
     public interface IOperationStrategy
     {
+        int Id { get; }
         bool AddToDb();
     }
 }

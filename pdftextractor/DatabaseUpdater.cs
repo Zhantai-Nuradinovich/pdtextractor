@@ -24,18 +24,14 @@ namespace pdftextractor
         string directory = "../../../Downloaded Files";
 
         //нужно сохранить адрес последней загруженной страницы
-        public DatabaseUpdater(IOperationStrategy strategy, IPdfBuilder builder)
+        public DatabaseUpdater(IPdfBuilder builder)
         {
-            Strategy = strategy;
             Builder = builder;
         }
         public void UpdateDatabase()
         {
             int curPageIndex = 1;
             ResultExtractor resultExtractor;
-            VoteOperator voteOperator;
-            LawOperator lawOperator;
-            DeputyOperator deputyOperator;
 
             while(true)
             {
@@ -65,12 +61,16 @@ namespace pdftextractor
                     foreach (var votesPdf in votesPdfs)
                     {
                         //deputyOperator = new DeputyOperator(votesPdf.Initiators);
-                        lawOperator = new LawOperator();
-                        int id = lawOperator.AddToDb(votesPdf.LawName);
+
+                        Strategy = new LawStrategy() { LawName = votesPdf.LawName };
+                        int id = UpdateStrategysTable(Strategy);
+
                         resultExtractor = new ResultExtractor(directory + "/" + votesPdf.FileName + ".pdf", votesPdf.Initiators, id);
-                        voteOperator = new VoteOperator(resultExtractor);
-                        bool isAdded = voteOperator.AddToDb(id);
-                        if(!isAdded)
+
+                        Strategy = new VoteStrategy(resultExtractor, id);
+                        bool isAdded = UpdateStrategysTable(Strategy) == id;
+
+                        if (!isAdded)
                         {
                             ConsoleExtensions.WriteInConsole($"Failed to add {votesPdf.FileName}.pdf, terminating update", ConsoleColor.Red);
                             return;
@@ -84,6 +84,14 @@ namespace pdftextractor
             {
                 Directory.Delete(directory, true);
             }
+        }
+
+        int UpdateStrategysTable(IOperationStrategy strategy)
+        {
+            if (strategy.AddToDb())
+                return strategy.Id;
+            
+            return -1;
         }
     }
 }
