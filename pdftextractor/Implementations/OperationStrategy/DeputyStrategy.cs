@@ -17,9 +17,8 @@ namespace pdftextractor.Implementations
             get => DeputyId;
         }
 
-        public DeputyStrategy(int deputyId, string deputyName)
+        public DeputyStrategy(string deputyName)
         {
-            DeputyId = deputyId;
             DeputyName = deputyName;
         }
 
@@ -29,12 +28,18 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    if (!db.Deputies.Where(x => x.Name == DeputyName).Any())
+                    var deputy = new Deputy() { Name = DeputyName };
+
+                    if (db.Deputies.Where(d => d.Name == DeputyName).Any())
                     {
-                        DeputyId = db.Deputies.Add(new Deputy() { Name = DeputyName }).Entity.Id;
+                        DeputyId = db.Deputies.Where(d => d.Name == DeputyName).FirstOrDefault().Id;
+                        return true;
                     }
 
+                    deputy = db.Add(deputy).Entity;
                     db.SaveChanges();
+
+                    DeputyId = deputy.Id;
 
                     return true;
                 }

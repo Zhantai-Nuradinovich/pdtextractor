@@ -1,4 +1,5 @@
-﻿using pdftextractor.Interfaces;
+﻿using pdftextractor.Data.Models;
+using pdftextractor.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,21 +29,26 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-
+                    List<Vote> votesToDb = new List<Vote>();
                     foreach (var vote in extractor.Votes)
                     {
-                        vote.Law = null;
-                        vote.LawId = LawId;
-                        var depName = vote.Deputy.Name;
+                        Vote newVote = new Vote();
+                        newVote.LawId = LawId;
 
-                        if (db.Deputies.Where(x => x.Name == depName).Any())
-                        {
-                            vote.Deputy = null;
-                        }
+                        newVote.Decision = vote.Decision;
 
+                        var depName = vote.Deputy?.Name;
+
+                        if (db.Deputies.Where(d => d.Name == depName).Any())
+                            newVote.DeputyId = db.Deputies.Where(d => d.Name == depName).FirstOrDefault().Id;
+                        else
+                            newVote.Deputy = vote.Deputy;
+                        
+
+                        votesToDb.Add(newVote);
                     }
 
-                    db.Votes.AddRange(extractor.Votes);
+                    db.Votes.AddRange(votesToDb);
 
                     db.SaveChanges();
 

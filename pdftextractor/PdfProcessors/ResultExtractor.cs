@@ -50,12 +50,11 @@ namespace pdftextractor
                 }
                 vote.LawId = LawId;
 
-                using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
-                {
-                    vote.DeputyId = db.Deputies.Where(d => d.Name == vote.Deputy.Name).FirstOrDefault()?.Id 
-                        ?? db.Deputies.Add(vote.Deputy).Entity.Id;
-                }
-
+                //using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
+                //{
+                //    vote.DeputyId = db.Deputies.Where(d => d.Name == vote.Deputy.Name).FirstOrDefault()?.Id 
+                //        ?? db.Deputies.Add(vote.Deputy).Entity.Id;
+                //}
 
                 votes[i - 16] = vote;
             }

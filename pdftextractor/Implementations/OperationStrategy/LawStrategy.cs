@@ -22,12 +22,19 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    Law law = new Law() { Name = LawName, DateTime = DateTime.Now };
-                    law = db.Laws.Add(law).Entity;
+                    Law law = new Law() { LawName = LawName, OfferDate = DateTime.Now };
 
+                    if(db.Laws.Where(l => l.LawName == LawName).Any())
+                    {
+                        LawId = db.Laws.Where(l => l.LawName == LawName).FirstOrDefault().Id;
+                        return true;
+                    }
+
+                    law = db.Add(law).Entity;
                     db.SaveChanges();
 
                     LawId = law.Id;
+
                     return true;
                 }
             }

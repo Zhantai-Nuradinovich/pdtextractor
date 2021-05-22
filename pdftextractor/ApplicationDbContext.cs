@@ -20,7 +20,7 @@ namespace pdftextractor
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS01;Database=pdftextractor;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PanakotaDb;Trusted_Connection=True;");
         }
     }
 }
