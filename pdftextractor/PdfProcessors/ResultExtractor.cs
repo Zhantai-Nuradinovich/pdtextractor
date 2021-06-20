@@ -39,15 +39,29 @@ namespace pdftextractor
                 string currentLine = extracted[i];
 
                 Vote vote = GetVoteResults(currentLine);
+                string name = vote.Deputy.Name;
 
-                var L_Error = vote.Deputy.Name.IndexOf("Л ");
+                var L_Error = name.IndexOf("Л ");
                 if(L_Error  > 0)
                 {
-                    vote.Deputy = new Deputy()
-                    {
-                        Name = vote.Deputy.Name.Remove(L_Error, 1)
-                    };
+                    name = name.Remove(L_Error, 1);
                 }
+                var CH_Error = name.IndexOf("Ч ");
+                if (CH_Error > 0)
+                {
+                    name = name.Remove(CH_Error, 1);
+                }
+                var E_Error = name.IndexOf("э ");
+                if (E_Error > 0)
+                {
+                    name = name.Remove(E_Error, 1);
+                }
+
+
+                vote.Deputy = new Deputy()
+                {
+                    Name = name
+                };
                 vote.LawId = LawId;
 
                 //using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
