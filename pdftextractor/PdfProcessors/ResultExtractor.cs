@@ -13,7 +13,7 @@ namespace pdftextractor
     public class ResultExtractor
     {
         string filePath { get; set; }
-        public Vote[] Votes { get; set; } // Изменил на свойство, теперь получать голоса будет только раз, когда объект инициализируется
+        public TVote[] Votes { get; set; } // Изменил на свойство, теперь получать голоса будет только раз, когда объект инициализируется
         public List<string> Initiators { get; set; }
         public int LawId { get; set; }
         public ResultExtractor(string _filePath, List<string> initiators, int lawId)
@@ -23,7 +23,7 @@ namespace pdftextractor
             Votes = ParseFile();
             LawId = lawId;
         }
-        public Vote[] ParseFile()
+        public TVote[] ParseFile()
         {
             FileStream fileStream = new FileStream(filePath, FileMode.Open);
 
@@ -32,13 +32,13 @@ namespace pdftextractor
 
             loadedDocument.Close(true);
 
-            Vote[] votes = new Vote[extracted.Length - 18];
+            TVote[] votes = new TVote[extracted.Length - 18];
 
             for(int i = 16; i < extracted.Length - 2; i++)
             {
                 string currentLine = extracted[i];
 
-                Vote vote = GetVoteResults(currentLine);
+                TVote vote = GetVoteResults(currentLine);
                 string name = vote.Deputy.Name;
 
                 var L_Error = name.IndexOf("Л ");
@@ -58,11 +58,11 @@ namespace pdftextractor
                 }
 
 
-                vote.Deputy = new Deputy()
+                vote.Deputy = new TDeputy()
                 {
                     Name = name
                 };
-                vote.LawId = LawId;
+                vote.LawsAmendementId = LawId;
 
                 //using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 //{
@@ -81,7 +81,7 @@ namespace pdftextractor
         public string GetString()
         {
             string res = "";
-            foreach(Vote vote in Votes)
+            foreach(TVote vote in Votes)
             {
                 res += $"{vote.Deputy.Name} {vote.GetDecisionString()}\n";
             }
@@ -89,9 +89,9 @@ namespace pdftextractor
             return res;
         }
 
-        private Vote GetVoteResults(string currentLine)
+        private TVote GetVoteResults(string currentLine)
         {
-            var vote = new Vote();
+            var vote = new TVote();
 
             switch (currentLine.Substring(currentLine.Length - 3, 1))
             {
@@ -100,13 +100,13 @@ namespace pdftextractor
                         vote.Decision = Decision.Absent;
 
                         if (currentLine[currentLine.Length - 15] == 'н')
-                            vote.Deputy = new Deputy()
+                            vote.Deputy = new TDeputy()
                             {
                                 Name = currentLine.Substring(0, currentLine.Length - 15)
                             };
 
                         else
-                            vote.Deputy = new Deputy()
+                            vote.Deputy = new TDeputy()
                             {
                                 Name = currentLine.Substring(0, currentLine.Length - 14)
                             };
@@ -118,12 +118,12 @@ namespace pdftextractor
                         vote.Decision = Decision.Absent;
 
                         if (currentLine[currentLine.Length - 14] == 'н')
-                            vote.Deputy = new Deputy()
+                            vote.Deputy = new TDeputy()
                             {
                                 Name = currentLine.Substring(0, currentLine.Length - 14)
                             };
                         else
-                            vote.Deputy = new Deputy()
+                            vote.Deputy = new TDeputy()
                             {
                                 Name = currentLine.Substring(0, currentLine.Length - 13)
                             };
@@ -133,7 +133,7 @@ namespace pdftextractor
                 case "з":
                     {
                         vote.Decision = Decision.Agreed;
-                        vote.Deputy = new Deputy()
+                        vote.Deputy = new TDeputy()
                         {
                             Name = currentLine.Substring(0, currentLine.Length - 3)
                         };
@@ -143,7 +143,7 @@ namespace pdftextractor
                 case "и":
                     {
                         vote.Decision = Decision.Rejected;
-                        vote.Deputy = new Deputy()
+                        vote.Deputy = new TDeputy()
                         {
                             Name = currentLine.Substring(0, currentLine.Length - 7)
                         };
