@@ -29,10 +29,10 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    List<Vote> votesToDb = new List<Vote>();
+                    List<TVote> votesToDb = new List<TVote>();
                     foreach (var vote in extractor.Votes)
                     {
-                        Vote newVote = new Vote();
+                        TVote newVote = new TVote();
                         newVote.LawId = LawId;
 
                         newVote.Decision = vote.Decision;

@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 
 namespace pdftextractor.Data.Models
 {
-    public class Deputy
+    public class TDeputy: BaseModel
     {
-        [Key]
-        public int Id { get; set; }
         public string Name { get; set; }
+        public ICollection<TVote> Votes { get; set; }
     }
 }

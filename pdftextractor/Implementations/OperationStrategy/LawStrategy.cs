@@ -22,7 +22,7 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    Law law = new Law() { LawName = LawName, OfferDate = DateTime.Now };
+                    TLaw law = new TLaw() { LawName = LawName };
 
                     if(db.Laws.Where(l => l.LawName == LawName).Any())
                     {

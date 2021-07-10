@@ -19,7 +19,7 @@ namespace pdftextractor
             this.pdfBuilder = pdfBuilder;
         }
 
-        public List<VotesPdf> ConstructPdf()
+        public List<TLawsAmendment> ConstructPdf()
         {
             //Здесь конечный результат
             //Просто вызвать методы из builderа

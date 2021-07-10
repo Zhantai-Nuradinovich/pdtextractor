@@ -15,7 +15,7 @@ namespace pdftextractor.Operators
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    Law law = new Law() { LawName = lawName, OfferDate = DateTime.Now };
+                    TLaw law = new TLaw() { LawName = lawName };
                     law = db.Laws.Add(law).Entity;
 
                     db.SaveChanges();

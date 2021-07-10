@@ -1,5 +1,4 @@
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,11 +7,9 @@ using System.Threading.Tasks;
 
 namespace pdftextractor.Data.Models
 {
-    public class Law
+    public class BaseModel
     {
         [Key]
         public int Id { get; set; }
-        public string LawName { get; set; }
-        public DateTime OfferDate { get; set; }
     }
 }

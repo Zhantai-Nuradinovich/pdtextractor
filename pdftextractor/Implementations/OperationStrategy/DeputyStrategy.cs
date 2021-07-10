@@ -28,7 +28,7 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    var deputy = new Deputy() { Name = DeputyName };
+                    var deputy = new TDeputy() { Name = DeputyName };
 
                     if (db.Deputies.Where(d => d.Name == DeputyName).Any())
                     {

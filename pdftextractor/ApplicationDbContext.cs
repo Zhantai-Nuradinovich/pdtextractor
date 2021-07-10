@@ -10,9 +10,9 @@ namespace pdftextractor
 {
     public class ApplicationDbContext : DbContext
     {
-        public DbSet<Deputy> Deputies { get; set; }
-        public DbSet<Law> Laws { get; set; }
-        public DbSet<Vote> Votes { get; set; }
+        public DbSet<TDeputy> Deputies { get; set; }
+        public DbSet<TLaw> Laws { get; set; }
+        public DbSet<TVote> Votes { get; set; }
         public ApplicationDbContext()
         {
             Database.EnsureCreated();

@@ -7,24 +7,22 @@ using System.Threading.Tasks;
 
 namespace pdftextractor.Data.Models
 {
-    public class Vote
+    public class TVote: BaseModel
     {
-        [Key]
-        public int Id { get; set; }
-        public int LawId { get; set; }
-        public Law Law { get; set; }
+        public int LawsAmendementId { get; set; }
+        public TLawsAmendment LawsAmendment { get; set; }
         public int DeputyId { get; set; }
-        public Deputy Deputy { get; set; }
+        public TDeputy Deputy { get; set; }
         public Decision Decision { get; set; }
 
         public string GetDecisionString()
         {
             return Decision switch
             {
-                Decision.Absent => "Îòñóòñòâîâàë",
-                Decision.Agreed => "Çà",
-                Decision.Rejected => "Ïðîòèâ",
-                _ => "Èíèöèàòîð"
+                Decision.Absent => "ÐžÑ‚ÑÑƒÑ‚ÑÑ‚Ð²Ð¾Ð²Ð°Ð»",
+                Decision.Agreed => "Ð—Ð°",
+                Decision.Rejected => "ÐŸÑ€Ð¾Ñ‚Ð¸Ð²",
+                _ => "Ð˜Ð½Ð¸Ñ†Ð¸Ð¸Ñ€Ð¾Ð²Ð°Ð»"
             };
         }
     }

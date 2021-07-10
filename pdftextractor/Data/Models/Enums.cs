@@ -14,4 +14,10 @@ namespace pdftextractor.Data.Models
         Rejected,
         Initiator
     }
+
+    public enum LawCategory
+    {
+        Constitution,
+        Unknown
+    }
 }
