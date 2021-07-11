@@ -11,16 +11,16 @@ namespace pdftextractor.Implementations
     public class VoteStrategy : IOperationStrategy
     {
         public ResultExtractor extractor { get; set; }
-        int LawId { get; set; }
+        int LawsAmendmentId { get; set; }
         public int Id 
         { 
-            get => LawId; 
+            get => LawsAmendmentId; 
         }
 
-        public VoteStrategy(ResultExtractor extractor, int lawId)
+        public VoteStrategy(ResultExtractor extractor, int lawsAmendmentId)
         {
             this.extractor = extractor;
-            LawId = lawId;
+            LawsAmendmentId = lawsAmendmentId;
         }
 
         public bool AddToDb()
@@ -33,7 +33,7 @@ namespace pdftextractor.Implementations
                     foreach (var vote in extractor.Votes)
                     {
                         TVote newVote = new TVote();
-                        newVote.LawId = LawId;
+                        newVote.LawsAmendmentId = LawsAmendmentId;
 
                         newVote.Decision = vote.Decision;
 

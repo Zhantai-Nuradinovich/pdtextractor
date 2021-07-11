@@ -12,6 +12,6 @@ namespace pdftextractor.Interfaces
         List<string> GetArticlesUrls(string pageUrl);
         void DownloadFilesInArticle(string articleUrl);
         string RemoveHtmlCodes(string htmlString);
-        TLawsAmendment GetFormattedVoteInfo(string rawHtml, string fileName);
+        VotesPdf GetFormattedVoteInfo(string rawHtml, string fileName);
     }
 }

@@ -59,7 +59,7 @@ namespace pdftextractor.Implementations
             {
                 htmlCode = myWebClient.DownloadString(articleUrl);
 
-                var pdfFiles = new List<TLawsAmendment>();
+                var pdfFiles = new List<VotesPdf>();
 
                 int lastIndex = 0;
                 int lastName = 0;
@@ -79,7 +79,7 @@ namespace pdftextractor.Implementations
                     string rawLawString = htmlCode.Substring(rawLawStringStartIndex, rawLawStringEndIndex - rawLawStringStartIndex + 2);
 
                     lastName++;
-                    TLawsAmendment fileInfo = GetFormattedVoteInfo(rawLawString, lastName.ToString("D2"));
+                    VotesPdf fileInfo = GetFormattedVoteInfo(rawLawString, lastName.ToString("D2"));
 
                     pdfFiles.Add(fileInfo);
 
@@ -92,14 +92,14 @@ namespace pdftextractor.Implementations
 
                 using (FileStream fs = new FileStream(directory + "/pdf files info.xml", FileMode.OpenOrCreate))
                 {
-                    var xs = new System.Xml.Serialization.XmlSerializer(typeof(List<TLawsAmendment>));
+                    var xs = new System.Xml.Serialization.XmlSerializer(typeof(List<VotesPdf>));
                     xs.Serialize(fs, pdfFiles);
                 }
             }
         }
 
 
-        public TLawsAmendment GetFormattedVoteInfo(string rawHtml, string fileName)
+        public VotesPdf GetFormattedVoteInfo(string rawHtml, string fileName)
         {
             string lawName = "";
             var initiators = new List<string>();
@@ -144,7 +144,7 @@ namespace pdftextractor.Implementations
             rawHtml = rawHtml.Trim();
             lawName = lawName.Trim();
 
-            var formattedVoteInfo = new TLawsAmendment()
+            var formattedVoteInfo = new VotesPdf()
             {
                 LawName = lawName,
                 Initiators = initiators,

@@ -13,6 +13,7 @@ namespace pdftextractor
         public DbSet<TDeputy> Deputies { get; set; }
         public DbSet<TLaw> Laws { get; set; }
         public DbSet<TVote> Votes { get; set; }
+        public DbSet<TLawsAmendment> LawsAmendments { get; set; }
         public ApplicationDbContext()
         {
             Database.EnsureCreated();

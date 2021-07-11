@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace pdftextractor.Implementations
 {
-    public class LawStrategy : IOperationStrategy
+    public class LawsAmendmentStrategy : IOperationStrategy
     {
-        public string LawName { get; set; }
-        public int LawNumber { get; set; }
-        public LawCategory Category { get; set; }
-        public string AddInfo { get; set; }
+        int LawsAmendmentId { get; set; }
         public int LawId { get; set; }
+        public DateTime AmendmentDate { get; set; }
+        public string LinkLaw { get; set; } 
+        public string LinkVotes { get; set; }
         public int Id
         {
-            get => LawId;
+            get => LawsAmendmentId;
         }
         public bool AddToDb()
         {
@@ -25,31 +25,25 @@ namespace pdftextractor.Implementations
             {
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
-                    TLaw law = new TLaw() 
+                    TLawsAmendment lawsAmendment = new TLawsAmendment() 
                     { 
-                        LawName = LawName,
-                        LawNumber = LawNumber,
-                        Category = Category,
-                        AddInfo = AddInfo
+                        LawId = LawId,
+                        AmendmentDate = AmendmentDate,
+                        LinkLaw = LinkLaw,
+                        LinkVotes = LinkVotes
                     };
 
-                    if(db.Laws.Where(l => l.LawName == LawName).Any())
-                    {
-                        LawId = db.Laws.Where(l => l.LawName == LawName).FirstOrDefault().Id;
-                        return true;
-                    }
-
-                    law = db.Add(law).Entity;
+                    lawsAmendment = db.Add(lawsAmendment).Entity;
                     db.SaveChanges();
 
-                    LawId = law.Id;
+                    LawsAmendmentId = lawsAmendment.Id;
 
                     return true;
                 }
             }
             catch (Exception)
             {
-                LawId = -1;
+                LawsAmendmentId = -1;
                 return false;
             }
         }
