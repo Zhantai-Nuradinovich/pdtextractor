@@ -2,7 +2,6 @@
 using pdftextractor.Decorators;
 using pdftextractor.Implementations;
 using pdftextractor.Interfaces;
-using pdftextractor.Operators;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -33,23 +32,21 @@ namespace pdftextractor
             int curPageIndex = 1;
             ResultExtractor resultExtractor;
 
-            while(true)
+            while(true) //one page
             {
                 string pageUrl = baseUrl + curPageIndex;
                 List<string> articlesOnPage = Builder.GetArticlesUrls(pageUrl);
-
                 ConsoleExtensions.WriteInConsole("Checking articles on " + pageUrl, ConsoleColor.Yellow);
 
                 if (articlesOnPage.Count == 0)
                 {
-                    ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);
-                    break;
+                    ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);//probably, it stops the application (Ask Aman to run the old version of the app)
+                    break; //continue;
                 }
 
                 foreach(string articleUrl in articlesOnPage)
                 {
                     Builder.DownloadFilesInArticle(articleUrl);
-
                     List<VotesPdf> votesPdfs;
 
                     using (FileStream fs = new FileStream(directory + "/pdf files info.xml", FileMode.OpenOrCreate))

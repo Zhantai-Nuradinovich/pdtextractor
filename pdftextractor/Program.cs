@@ -1,6 +1,5 @@
 ﻿using pdftextractor.Implementations;
 using pdftextractor.Interfaces;
-using pdftextractor.Operators;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Parsing;
 using System;

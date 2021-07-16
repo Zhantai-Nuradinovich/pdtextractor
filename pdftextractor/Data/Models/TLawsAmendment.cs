@@ -11,8 +11,8 @@ namespace pdftextractor.Data.Models
         public int LawId { get; set; }
         public TLaw Law { get; set; }
         public DateTime AmendmentDate { get; set; }
-        public string LinkLaw { get; set; } //какой закон правили
-        public string LinkVotes { get; set; } //как голосовали
+        public string LinkToLaw { get; set; } //какой закон правили
+        public string LinkToVotes { get; set; } //как голосовали
         public ICollection<TVote> Votes { get; set; }
     }
 }
