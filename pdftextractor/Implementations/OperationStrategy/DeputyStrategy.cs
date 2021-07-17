@@ -29,16 +29,13 @@ namespace pdftextractor.Implementations
                 using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 {
                     var deputy = new TDeputy() { Name = DeputyName };
-
                     if (db.Deputies.Where(d => d.Name == DeputyName).Any())
                     {
                         DeputyId = db.Deputies.Where(d => d.Name == DeputyName).FirstOrDefault().Id;
                         return true;
                     }
-
                     deputy = db.Add(deputy).Entity;
                     db.SaveChanges();
-
                     DeputyId = deputy.Id;
 
                     return true;

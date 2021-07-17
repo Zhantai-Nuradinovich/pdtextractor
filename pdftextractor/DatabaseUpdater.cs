@@ -41,7 +41,7 @@ namespace pdftextractor
                 if (articlesOnPage.Count == 0)
                 {
                     ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);//probably, it stops the application (Ask Aman to run the old version of the app)
-                    break; //continue;
+                    continue; //continue;
                 }
 
                 foreach(string articleUrl in articlesOnPage)

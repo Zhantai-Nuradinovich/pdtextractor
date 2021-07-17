@@ -34,22 +34,17 @@ namespace pdftextractor.Implementations
                     {
                         TVote newVote = new TVote();
                         newVote.LawsAmendmentId = LawsAmendmentId;
-
                         newVote.Decision = vote.Decision;
-
                         var depName = vote.Deputy?.Name;
 
                         if (db.Deputies.Where(d => d.Name == depName).Any())
                             newVote.DeputyId = db.Deputies.Where(d => d.Name == depName).FirstOrDefault().Id;
                         else
                             newVote.Deputy = vote.Deputy;
-                        
 
                         votesToDb.Add(newVote);
                     }
-
                     db.Votes.AddRange(votesToDb);
-
                     db.SaveChanges();
 
                     return true;

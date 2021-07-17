@@ -13,8 +13,8 @@ namespace pdftextractor.Implementations
         int LawsAmendmentId { get; set; }
         public int LawId { get; set; }
         public DateTime AmendmentDate { get; set; }
-        public string LinkLaw { get; set; } 
-        public string LinkVotes { get; set; }
+        public string LinkToLaw { get; set; } 
+        public string LinkToVotes { get; set; }
         public int Id
         {
             get => LawsAmendmentId;
@@ -29,8 +29,8 @@ namespace pdftextractor.Implementations
                     { 
                         LawId = LawId,
                         AmendmentDate = AmendmentDate,
-                        LinkLaw = LinkLaw,
-                        LinkVotes = LinkVotes
+                        LinkToLaw = LinkToLaw,
+                        LinkToVotes = LinkToVotes
                     };
 
                     lawsAmendment = db.Add(lawsAmendment).Entity;
