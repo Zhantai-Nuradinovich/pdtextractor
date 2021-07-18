@@ -36,7 +36,7 @@ namespace pdftextractor.Implementations
                     if(db.Laws.Where(l => l.LawName == LawName).Any())
                     {
                         LawId = db.Laws.Where(l => l.LawName == LawName).FirstOrDefault().Id;
-                        return true;
+                        return false;
                     }
 
                     law = db.Add(law).Entity;

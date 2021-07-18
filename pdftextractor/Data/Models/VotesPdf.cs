@@ -23,11 +23,12 @@ namespace pdftextractor.Data.Models
             return date;
         }
 
-        private string GetLawNumber()
+        public int GetLawNumber()
         {
-            string number = FileName.Substring(FileName.IndexOf("№ ") + 2, FileName.IndexOf(" (") - FileName.IndexOf("№ ") + 2);
-
-            return number;
+            string number = FileName.Substring(FileName.IndexOf("№ ") + 2, FileName.IndexOf(" ", FileName.IndexOf("№ ") + 2) - FileName.IndexOf("№ ") + 2);
+            if (number.Contains('-'))
+                number = number.Split('-')[0];
+            return int.Parse(number);
         }
         private int GetMonthNumber(string month) =>
             month switch

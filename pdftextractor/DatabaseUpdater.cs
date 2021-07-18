@@ -41,7 +41,7 @@ namespace pdftextractor
                 if (articlesOnPage.Count == 0)
                 {
                     ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);//probably, it stops the application (Ask Aman to run the old version of the app)
-                    continue; //continue;
+                    break; //continue;
                 }
 
                 foreach(string articleUrl in articlesOnPage)
@@ -59,8 +59,15 @@ namespace pdftextractor
                     {
                         //deputyOperator = new DeputyOperator(votesPdf.Initiators);
 
-                        Strategy = new LawStrategy() { LawName = votesPdf.LawName };
+                        Strategy = new LawStrategy() { LawName = votesPdf.LawName, LawNumber = votesPdf.GetLawNumber() };
                         int id = UpdateStrategysTable(Strategy);
+
+                        if(id == -2)
+                        {
+                            DateTime dateOfAmendment = votesPdf.GetDate();
+                            Strategy = new LawsAmendmentStrategy() { LawId = Strategy.Id, AmendmentDate = dateOfAmendment};
+                            id = UpdateStrategysTable(Strategy);
+                        }//-------------------------------------------TUTA TY--------------------------------------------------------
 
                         resultExtractor = new ResultExtractor(directory + "/" + votesPdf.FileName + ".pdf", votesPdf.Initiators, id);
 
@@ -88,7 +95,9 @@ namespace pdftextractor
             if (strategy.AddToDb())
                 return strategy.Id;
             
-            return -1;
+            return strategy.Id == -1 
+                ? -1 
+                : -2;
         }
     }
 }
