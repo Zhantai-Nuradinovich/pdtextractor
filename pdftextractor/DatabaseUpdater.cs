@@ -40,7 +40,7 @@ namespace pdftextractor
 
                 if (articlesOnPage.Count == 0)
                 {
-                    ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);//probably, it stops the application (Ask Aman to run the old version of the app)
+                    ConsoleExtensions.WriteInConsole("Page empty, ending update", ConsoleColor.Blue);
                     break; //continue;
                 }
 
@@ -48,7 +48,6 @@ namespace pdftextractor
                 {
                     Builder.DownloadFilesInArticle(articleUrl);
                     List<VotesPdf> votesPdfs;
-
                     using (FileStream fs = new FileStream(directory + "/pdf files info.xml", FileMode.OpenOrCreate))
                     {
                         var xs = new System.Xml.Serialization.XmlSerializer(typeof(List<VotesPdf>));
@@ -59,17 +58,27 @@ namespace pdftextractor
                     {
                         //deputyOperator = new DeputyOperator(votesPdf.Initiators);
 
-                        Strategy = new LawStrategy() { LawName = votesPdf.LawName, LawNumber = votesPdf.GetLawNumber() };
+                        Strategy = new LawStrategy() 
+                        { 
+                            LawName = votesPdf.LawName, 
+                            LawNumber = votesPdf.GetLawNumber(),
+                            LawDate = votesPdf.GetDate()
+                        };
                         int id = UpdateStrategysTable(Strategy);
-
-                        if(id == -2)
-                        {
-                            DateTime dateOfAmendment = votesPdf.GetDate();
-                            Strategy = new LawsAmendmentStrategy() { LawId = Strategy.Id, AmendmentDate = dateOfAmendment};
-                            id = UpdateStrategysTable(Strategy);
-                        }//-------------------------------------------TUTA TY--------------------------------------------------------
-
                         resultExtractor = new ResultExtractor(directory + "/" + votesPdf.FileName + ".pdf", votesPdf.Initiators, id);
+
+                        if (id == -2) // Значит, что нужно добавить поправки к закону, а не сам закон
+                        {
+                            DateTime dateOfAmendment = resultExtractor.AmendmentDate;
+                            Strategy = new LawsAmendmentStrategy() 
+                            { 
+                                LawId = Strategy.Id, 
+                                AmendmentDate = dateOfAmendment,
+                                LinkToVotes = articleUrl,
+                                AuxLawNumber = (Strategy as LawStrategy)?.LawNumber ?? "Нет номера"
+                            };
+                            id = UpdateStrategysTable(Strategy);
+                        }
 
                         Strategy = new VoteStrategy(resultExtractor, id);
                         bool isAdded = UpdateStrategysTable(Strategy) == id;

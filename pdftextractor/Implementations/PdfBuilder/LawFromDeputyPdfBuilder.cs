@@ -29,7 +29,7 @@ namespace pdftextractor.Implementations
             int lastIndex = 0;
             while (true)
             {
-                int curIndex = htmlCode.IndexOf("news-read-more", lastIndex);
+                int curIndex = htmlCode.IndexOf("more-link", lastIndex); //more-link - стили <a>, чтобы получить ссылку
                 if (curIndex == -1)
                     break;
 

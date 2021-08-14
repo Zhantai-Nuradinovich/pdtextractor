@@ -19,12 +19,19 @@ namespace pdftextractor.Implementations
         {
             get => LawsAmendmentId;
         }
+
+        public string AuxLawNumber { get; set; }
         public bool AddToDb()
         {
             try
             {
-                using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
+                using (ApplicationDbContext db = new ApplicationDbContext())
                 {
+                    if (db.Amendments.Any(x => x.LinkToVotes == LinkToVotes))//Проверка на то, чтобы не дублировались поправки
+                    {
+                        LawsAmendmentId = db.Amendments.Where(x => x.LinkToVotes == LinkToVotes).FirstOrDefault().Id;
+                        return true;
+                    }
                     TLawsAmendment lawsAmendment = new TLawsAmendment() 
                     { 
                         LawId = LawId,
@@ -32,10 +39,10 @@ namespace pdftextractor.Implementations
                         LinkToLaw = LinkToLaw,
                         LinkToVotes = LinkToVotes
                     };
-
+                    if (AuxLawNumber != "Нет номера")
+                        lawsAmendment.LinkToLaw = GetLinkToLawFromMinjust(lawsAmendment.LawId, lawsAmendment.AmendmentDate, db);
                     lawsAmendment = db.Add(lawsAmendment).Entity;
                     db.SaveChanges();
-
                     LawsAmendmentId = lawsAmendment.Id;
 
                     return true;
@@ -46,6 +53,15 @@ namespace pdftextractor.Implementations
                 LawsAmendmentId = -1;
                 return false;
             }
+        }
+
+        private string GetLinkToLawFromMinjust(int lawId, DateTime amendmentDate, ApplicationDbContext db)
+        {
+            TLaw law = db.Laws.Where(x => x.Id == lawId).FirstOrDefault();
+            string lawNumber = law.LawNumber;
+            //
+
+            return "http://cbd.minjust.gov.kg/act/view/ru-ru/" + lawNumber;
         }
     }
 }

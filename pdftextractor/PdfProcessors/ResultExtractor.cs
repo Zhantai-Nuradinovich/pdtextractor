@@ -16,6 +16,7 @@ namespace pdftextractor
         public TVote[] Votes { get; set; } // Изменил на свойство, теперь получать голоса будет только раз, когда объект инициализируется
         public List<string> Initiators { get; set; }
         public int LawId { get; set; }
+        public DateTime AmendmentDate { get; set; }
         public ResultExtractor(string _filePath, List<string> initiators, int lawId)
         {
             filePath = _filePath;
@@ -62,7 +63,7 @@ namespace pdftextractor
                 {
                     Name = name
                 };
-                vote.LawsAmendementId = LawId;
+                vote.LawsAmendmentId = LawId;
 
                 //using (ApplicationDbContext db = new ApplicationDbContext()) // юсинг для освобождения ресурсов после использования контекста
                 //{
@@ -72,6 +73,9 @@ namespace pdftextractor
 
                 votes[i - 16] = vote;
             }
+            string date = extracted[0].Substring(0, extracted[0].Length - 1); //чтобы убрать \r
+            var nums = date.Split('.');
+            AmendmentDate = new DateTime(int.Parse(nums[2]), int.Parse(nums[1]), int.Parse(nums[0]));
 
             return votes;
         }

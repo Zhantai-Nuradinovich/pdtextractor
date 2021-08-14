@@ -12,40 +12,66 @@ namespace pdftextractor.Data.Models
         public List<string> Initiators { get; set; }
         public string FileName { get; set; }
 
+        List<string> month = new List<string>
+            {
+                "января","февраля","марта",
+                "апреля", "мая", "июня",
+                "июля", "августа", "сентября",
+                "октября", "ноября","декабря"
+            };
+
         public DateTime GetDate()
         {
-            string[] fullDateFromPdf = FileName.Substring(FileName.IndexOf("от ") + 3, FileName.IndexOf(" года") - (FileName.IndexOf("от ") + 3)).Split(' ');
-            int day = int.Parse(fullDateFromPdf[0]);
-            int month = GetMonthNumber(fullDateFromPdf[1]);
-            int year = int.Parse(fullDateFromPdf[2]);
-            DateTime date = new DateTime(year, month, day);
-
-            return date;
-        }
-
-        public int GetLawNumber()
-        {
-            string number = FileName.Substring(FileName.IndexOf("№ ") + 2, FileName.IndexOf(" ", FileName.IndexOf("№ ") + 2) - FileName.IndexOf("№ ") + 2);
-            if (number.Contains('-'))
-                number = number.Split('-')[0];
-            return int.Parse(number);
-        }
-        private int GetMonthNumber(string month) =>
-            month switch
+            List<string> words = FileName.Split(new char[] { ' ', ',', '!', ')', '(', '?' }).ToList();
+            for (int i = 0; i < words.Count; i++)
             {
-                "Январь" => 1,
-                "Февраль" => 2,
-                "Март" => 3,
-                "Апрель" => 4,
-                "Май" => 5,
-                "Июнь" => 6,
-                "Июль" => 7,
-                "Август" => 8,
-                "Сентябрь" => 9,
-                "Октябрь" => 10,
-                "Ноябрь" => 11,
-                "Декарь" => 12,
-                _ => throw new ArgumentException(message: "Нет такого месяца", paramName: month),
-            };
+                try
+                {
+                    DateTime answer = DateTime.Parse(words[i]);
+                    return answer;
+                }
+                catch
+                {
+                    if (i == words.Count - 1 || i == words.Count - 2 || i == words.Count - 3)
+                    {
+                        break;
+                    }
+                    else if (CheckOnNum(words[i]) && month.Contains(words[i + 1]) && CheckOnNum(words[i + 2]) && words[i + 3] == "года")
+                    {
+                        int numMonth = month.IndexOf(words[i + 1]);
+                        return new DateTime(int.Parse(words[i + 2]), numMonth, int.Parse(words[i]));
+                    }
+                }
+            }
+            return new DateTime();
+        }
+
+        public string GetLawNumber()
+        {
+            try
+            {
+                string str = FileName.Substring(FileName.IndexOf('№') + 2);
+
+                int index1 = 0;
+                int index2 = str.IndexOf(')');
+                string strin = str.Substring(index1, index2);
+                string[] NumAndDate = strin.Split(new string[] { " от " }, StringSplitOptions.RemoveEmptyEntries);
+
+                return NumAndDate[0];
+            }
+            catch
+            {
+                return "Нет номера";
+            }
+        }
+        public static bool CheckOnNum(string obj)
+        {
+            try
+            {
+                Convert.ToInt32(obj);
+                return true;
+            }
+            catch { return false; }
+        }
     }
 }
