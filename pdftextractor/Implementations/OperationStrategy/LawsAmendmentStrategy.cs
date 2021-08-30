@@ -3,6 +3,7 @@ using pdftextractor.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -57,11 +58,21 @@ namespace pdftextractor.Implementations
 
         private string GetLinkToLawFromMinjust(int lawId, DateTime amendmentDate, ApplicationDbContext db)
         {
-            TLaw law = db.Laws.Where(x => x.Id == lawId).FirstOrDefault();
-            string lawNumber = law.LawNumber;
-            //
+            //TLaw law = db.Laws.Where(x => x.Id == lawId).FirstOrDefault();
+            //string lawName = law.LawName;
+            //using (var client = new WebClient())
+            //{
+            //    client.BaseAddress = "http://cbd.minjust.gov.kg/OpenData/GetDocumentListByQuery?Name=";
 
-            return "http://cbd.minjust.gov.kg/act/view/ru-ru/" + lawNumber;
+            //}
+            string code = "";
+            
+            Random random = new Random();
+            const string chars = "0123456789";
+            code = new string(Enumerable.Repeat(chars, 4)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
+
+            return "http://cbd.minjust.gov.kg/act/view/ru-ru/" + code;
         }
     }
 }
